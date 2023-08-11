@@ -1,22 +1,76 @@
-import React from "react";
+import axios from "axios";
+import React, { ChangeEvent, FormEvent, useState } from "react";
+import { useNavigate } from "react-router";
+
+interface loginType {
+  username: string;
+  token: string;
+}
+interface formType {
+  username: string;
+  password: string;
+}
 
 export default function Login() {
+  const [form, setForm] = useState({
+    username: "",
+    password: "",
+  });
+  const navigate = useNavigate();
+
+  function handleChange(event: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
+    setForm((prevForm: formType) => ({ ...prevForm, [name]: value }));
+  }
+
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post<loginType>(
+        "https://intelliprep.onrender.com/account/login/",
+        form
+      );
+
+      // Access response data
+      const responseData = response.data;
+
+      // Now you can access specific properties from responseData
+      const token = responseData.token;
+      const username = responseData.username;
+
+      // You can also set the token in local storage
+      localStorage.setItem("token", token);
+      localStorage.setItem("username", username);
+
+      navigate("/");
+
+      // console.log("Token:", token);
+      // console.log("Username:", username);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="relative flex flex-col justify-center min-h-screen overflow-hidden font-montserrat ">
       <div className="w-full p-6 m-auto bg-white rounded-md shadow-md lg:max-w-xl">
         <h1 className="text-4xl font-semibold text-center text-purple-700 underline">
           Sign in
         </h1>
-        <form className="mt-6">
+        <form className="mt-6" onSubmit={handleSubmit}>
           <div className="mb-2">
             <label
-              htmlFor="email"
+              htmlFor="username"
               className="block text-lg font-semibold text-gray-800 "
             >
-              Email
+              Username
             </label>
             <input
-              type="email"
+              type="text"
+              name="username"
+              value={form.username}
+              onChange={handleChange}
               className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>
@@ -29,6 +83,9 @@ export default function Login() {
             </label>
             <input
               type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
               className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>

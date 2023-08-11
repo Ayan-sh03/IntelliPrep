@@ -10,6 +10,9 @@ import Books from "./Pages/Books/Books.tsx";
 import Quiz from "./Pages/Quiz/Quiz.tsx";
 import Login from "./Components/Login.tsx";
 import Signup from "./Components/Signup.tsx";
+// import { AppProvider } from "./Context/context";
+
+
 
 const router = createBrowserRouter([
   {
