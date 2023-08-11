@@ -6,9 +6,19 @@ import {
   Button,
   IconButton,
 } from "@material-tailwind/react";
+import { useNavigate } from "react-router";
 
 export default function NavbarNeo() {
   const [openNav, setOpenNav] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const handleClick = () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/account");
+    } else {
+      navigate("/login");
+    }
+  };
 
   useEffect(() => {
     window.addEventListener(
@@ -35,7 +45,7 @@ export default function NavbarNeo() {
         color="blue-gray"
         className="py-3 px-3 rounded-md font-montserrat shadow-md"
       >
-        <a href="#" className="flex items-center">
+        <a href="#" className="flex items-center" onClick={handleClick}>
           Account
         </a>
       </Typography>

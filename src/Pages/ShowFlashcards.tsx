@@ -1,15 +1,58 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Flashcard from "../Components/Flashcard";
 import { TiPlusOutline } from "react-icons/ti";
+import axios from "axios";
+
+interface flashcards {
+  id: string;
+  title: string;
+  content: string;
+}
 
 const ShowFlashcards = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [flashcards, setFlashcards] = useState<flashcards[]>([
+    {
+      id: "0",
+      title: "Sample Flashcard",
+      content: "Description",
+    },
+  ]);
+  const [edited, setEdited] = useState(false);
+
+  const getFlashcards = async () => {
+    const username = localStorage.getItem("username");
+    const token = localStorage.getItem("token");
+
+    if (!username) return <h1>Please login Again</h1>;
+    if (!token) return <h1>Please login Again</h1>;
+    console.log(username);
+
+    try {
+      const response = await axios.get<flashcards[]>(
+        `https://intelliprep.onrender.com/${username}/flashcards`,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+      setFlashcards(response.data);
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getFlashcards();
+  }, [edited]);
   return (
     <>
       <div className="flex p-20 bg-bgColor1 flex-col gap-5 w-screen h-screen font-montserrat">
         <h1 className="font-bold text-5xl text-white">Flashcards</h1>
         <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center w-5/12"
+          className="bg-blue-500 hover:bg-blue-700 text-white text-center font-bold py-2 px-4 rounded flex items-center w-[200px]"
           onClick={() => setShowModal(true)}
         >
           <TiPlusOutline className="mr-2" />
@@ -71,7 +114,10 @@ const ShowFlashcards = () => {
                     <button
                       className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="button"
-                      onClick={() => setShowModal(false)}
+                      onClick={() => {
+                        setShowModal(false);
+                        setEdited(true);
+                      }}
                     >
                       Save Changes
                     </button>
@@ -86,21 +132,18 @@ const ShowFlashcards = () => {
 
         <div className="flex flex-row  gap-10 flex-wrap">
           <Flashcard
-            title="New Temporary"
-            description="some random description"
+            id="1"
+            title=" Temporary"
+            content="some random description"
           />
-          <Flashcard
-            title="New Temporary"
-            description="some random description"
-          />
-          <Flashcard
-            title="New Temporary"
-            description="some random description"
-          />
-          <Flashcard
-            title="New Temporary"
-            description="some random description"
-          />
+          {flashcards.map((card) => (
+            <Flashcard
+              id={card.id}
+              key={card.title}
+              title={card.title}
+              content={card.content}
+            />
+          ))}
         </div>
       </div>
     </>
