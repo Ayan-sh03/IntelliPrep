@@ -3,6 +3,7 @@ import "../App.css";
 import { TiDeleteOutline, TiEdit } from "react-icons/ti";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { log } from "console";
 
 interface Fprops {
   id?: string;
@@ -24,30 +25,29 @@ const Flashcard = (props: Fprops) => {
     event.preventDefault();
     try {
       const data = await axios.delete(
-        `https://intelliprep.onrender.com/${username}/flashcards/${props.id}`,
+        `https://intelliprep.onrender.com/${username}/flashcards/${props.id}/`,
         {
           headers: {
             Authorization: `Token ${token}`,
           },
         }
       );
-      console.log(data);
+      // console.log(data);
     } catch (err) {
       alert(err);
     }
   }
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    console.log(flashcard);
+    console.log("handleSubmit", flashcard); // Add this line
     const { title, content } = flashcard;
     const object: Fprops = {
       title,
       content,
     };
-    // console.log(title, content);
     try {
       const data = await axios.put<Fprops>(
-        `https://intelliprep.onrender.com/${username}/flashcards/${props.id}`,
+        `https://intelliprep.onrender.com/${username}/flashcards/${props.id}/`,
         object,
         {
           headers: {
@@ -65,6 +65,8 @@ const Flashcard = (props: Fprops) => {
     event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
   ) {
     const { name, value } = event.target;
+    // console.log(name, " ", value);
+
     setFlashcard((prev: Fprops) => ({ ...prev, [name]: value }));
   }
 
@@ -93,31 +95,30 @@ const Flashcard = (props: Fprops) => {
                   className="flex flex-col gap-6 mx-10"
                   onSubmit={handleSubmit}
                 >
-                  <div className=" max-w-xl rounded-md border  p-6 text-black">
+                  <div className="max-w-xl rounded-md border p-6 text-black">
                     <div className="m-2 flex flex-col gap-3 rounded-sm text-xl">
-                      <label htmlFor="Title">Title</label>
+                      <label htmlFor="title">Title</label>
                       <input
-                        id="Title"
-                        name="Title"
-                        value={flashcard?.title}
+                        id="title"
+                        name="title"
+                        value={flashcard.title}
                         onChange={handleChange}
                         className="text-md hover:box-shadow-3xl hover:box-shadow-white focus:ring-3 focus:ring-blue rounded-md border bg-transparent py-1 indent-3 hover:outline-none focus:ring-inset"
                       />
                     </div>
 
                     <div className="m-2 flex flex-col gap-3 rounded-sm text-xl">
-                      <label htmlFor="Content">Content</label>
+                      <label htmlFor="content">Content</label>
                       <textarea
                         id="content"
                         name="content"
-                        value={flashcard?.content}
+                        value={flashcard.content}
                         onChange={handleChange}
                         className="border-gradient-to-r hover:box-shadow-3xl hover:box-shadow-white h-40 resize-none rounded-md border-2 bg-transparent from-blue-600 to-blue-300"
                       />
                     </div>
                   </div>
 
-                  {/*footer*/}
                   <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
                     <button
                       className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
@@ -129,10 +130,6 @@ const Flashcard = (props: Fprops) => {
                     <button
                       className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                       type="submit"
-                      onClick={() => {
-                        setShowModal(false);
-                        
-                      }}
                     >
                       Save Changes
                     </button>
