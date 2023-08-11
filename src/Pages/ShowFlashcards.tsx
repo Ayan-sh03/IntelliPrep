@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Flashcard from "../Components/Flashcard";
 import { TiPlusOutline } from "react-icons/ti";
 import axios from "axios";
 
 interface flashcards {
-  id: string;
+  id?: string;
   title: string;
   content: string;
 }
@@ -18,7 +18,11 @@ const ShowFlashcards = () => {
       content: "Description",
     },
   ]);
-  const [edited, setEdited] = useState(false);
+  const [newCard, setNewCard] = useState<flashcards>({
+    id: "",
+    title: "",
+    content: "",
+  });
 
   const getFlashcards = async () => {
     const username = localStorage.getItem("username");
@@ -26,7 +30,7 @@ const ShowFlashcards = () => {
 
     if (!username) return <h1>Please login Again</h1>;
     if (!token) return <h1>Please login Again</h1>;
-    console.log(username);
+    // console.log(username);
 
     try {
       const response = await axios.get<flashcards[]>(
@@ -44,9 +48,49 @@ const ShowFlashcards = () => {
     }
   };
 
+  function handleChange(
+    event: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>
+  ) {
+    const { name, value } = event.target;
+    // console.log(name, " ", value);
+
+    setNewCard((prev: flashcards) => ({ ...prev, [name]: value }));
+  }
+
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    const username = localStorage.getItem("username");
+    const token = localStorage.getItem("token");
+    if (!username) return <h1>Please login Again</h1>;
+    if (!token) return <h1>Please login Again</h1>;
+
+    if (!newCard.title.trim() && !newCard.content.trim()) {
+      alert("Please fill out both Title and Content fields.");
+      return;
+    }
+
+    try {
+      const response = await axios.post<flashcards>(
+        `https://intelliprep.onrender.com/${username}/flashcards/`,
+        newCard,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }
+      );
+      // console.log(response);
+      setFlashcards((prevFlashcards) => [...prevFlashcards, newCard]);
+
+      setNewCard({ title: "", content: "" });
+    } catch (error) {
+      alert(error);
+    }
+  }
+
   useEffect(() => {
     getFlashcards();
-  }, [edited]);
+  }, []);
   return (
     <>
       <div className="flex p-20 bg-bgColor1 flex-col gap-5 w-screen h-screen font-montserrat">
@@ -79,49 +123,50 @@ const ShowFlashcards = () => {
                     </button>
                   </div>
                   {/*body*/}
-
-                  <div className=" max-w-xl rounded-md border  p-6 text-black">
-                    <form className="flex flex-col gap-6 mx-10">
+                  <form
+                    className="flex flex-col gap-6 mx-10"
+                    onSubmit={handleSubmit}
+                  >
+                    <div className="max-w-xl rounded-md border p-6 text-black">
                       <div className="m-2 flex flex-col gap-3 rounded-sm text-xl">
-                        <label htmlFor="Title">Title</label>
+                        <label htmlFor="title">Title</label>
                         <input
-                          id="Title"
-                          name="Title"
+                          id="title"
+                          name="title"
+                          value={newCard.title}
+                          onChange={handleChange}
                           className="text-md hover:box-shadow-3xl hover:box-shadow-white focus:ring-3 focus:ring-blue rounded-md border bg-transparent py-1 indent-3 hover:outline-none focus:ring-inset"
                         />
                       </div>
 
                       <div className="m-2 flex flex-col gap-3 rounded-sm text-xl">
-                        <label htmlFor="Content">Content</label>
+                        <label htmlFor="content">Content</label>
                         <textarea
-                          id="Title"
-                          name="Title"
+                          id="content"
+                          name="content"
+                          value={newCard.content}
+                          onChange={handleChange}
                           className="border-gradient-to-r hover:box-shadow-3xl hover:box-shadow-white h-40 resize-none rounded-md border-2 bg-transparent from-blue-600 to-blue-300"
                         />
                       </div>
-                    </form>
-                  </div>
+                    </div>
 
-                  {/*footer*/}
-                  <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                    <button
-                      className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button"
-                      onClick={() => setShowModal(false)}
-                    >
-                      Close
-                    </button>
-                    <button
-                      className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="button"
-                      onClick={() => {
-                        setShowModal(false);
-                        setEdited(true);
-                      }}
-                    >
-                      Save Changes
-                    </button>
-                  </div>
+                    <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                      <button
+                        className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="button"
+                        onClick={() => setShowModal(false)}
+                      >
+                        Close
+                      </button>
+                      <button
+                        className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="submit"
+                      >
+                        Save Changes
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
