@@ -10,7 +10,8 @@ import Books from "./Pages/Books/Books.tsx";
 import Quiz from "./Pages/Quiz/Quiz.tsx";
 import Login from "./Components/Login.tsx";
 import Signup from "./Components/Signup.tsx";
-import Account from "./Components/Account.tsx";
+
+import NotFound from "./Components/NotFound.tsx";
 // import { AppProvider } from "./Context/context";
 
 const router = createBrowserRouter([
@@ -39,8 +40,8 @@ const router = createBrowserRouter([
     element: <Signup />,
   },
   {
-    path: "/account",
-    element: <Account />,
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
