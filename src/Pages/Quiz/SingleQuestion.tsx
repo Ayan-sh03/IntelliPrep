@@ -45,22 +45,28 @@ const QuestionComponent: React.FC<{ question: Question }> = ({ question }) => {
       {question.description && (
         <p className="text-lg">Description: {question.description}</p>
       )}
-      <ul className="flex flex-col gap-2">
-        <li className="block border-black  bg-amber-500 w-80 text-center p-2 ">
+      <ul className="flex flex-col gap-2 flex-wrap ">
+        <li className="block border-black   bg-amber-500 w-80 text-center p-2 ">
           {question.answers.answer_a}
         </li>
 
-        <li className="block border-black  bg-amber-500 w-80 text-center p-2 ">
-          {question.answers.answer_b}
-        </li>
+        {question.answers.answer_b && (
+          <li className="block border-black  bg-amber-500 w-80 text-center p-2 ">
+            {question.answers.answer_b}
+          </li>
+        )}
 
-        <li className="block border-black  bg-amber-500 w-80 text-center p-2 ">
-          {question.answers.answer_c}
-        </li>
+        {question.answers.answer_c && (
+          <li className="block border-black  bg-amber-500 w-80 text-center p-2 ">
+            {question.answers.answer_c}
+          </li>
+        )}
 
-        <li className="block border-black  bg-amber-500 w-80 text-center p-2 ">
-          {question.answers.answer_d}
-        </li>
+        {question.answers.answer_d && (
+          <li className="block border-black  bg-amber-500 w-80 text-center p-2 ">
+            {question.answers.answer_d}
+          </li>
+        )}
 
         {question.answers.answer_e && (
           <>

@@ -4,15 +4,14 @@ import App from "./App.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 
-import ShowFlashcards from "./Pages/ShowFlashcards.tsx";
+import ShowFlashcards from "./Pages/Flashcard/ShowFlashcards.tsx";
 
 import Books from "./Pages/Books/Books.tsx";
 import Quiz from "./Pages/Quiz/Quiz.tsx";
 import Login from "./Components/Login.tsx";
 import Signup from "./Components/Signup.tsx";
+import Account from "./Components/Account.tsx";
 // import { AppProvider } from "./Context/context";
-
-
 
 const router = createBrowserRouter([
   {
@@ -38,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: "/signup",
     element: <Signup />,
+  },
+  {
+    path: "/account",
+    element: <Account />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

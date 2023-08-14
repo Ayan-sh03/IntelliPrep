@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useNavigate } from "react-router";
 
 interface loginType {
@@ -28,7 +28,7 @@ export default function Login() {
 
     try {
       const response = await axios.post<loginType>(
-        "https://intelliprep.onrender.com/account/login/",
+        `${import.meta.env.VITE_APP_BACKEND_URL}/account/login/`,
         form
       );
 
