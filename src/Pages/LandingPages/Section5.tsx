@@ -1,5 +1,3 @@
-import React from "react";
-
 const Section5 = () => {
   return (
     <div className="h-80 bg-bgColor1">
