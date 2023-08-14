@@ -1,9 +1,8 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import "../App.css";
+import "../../App.css";
 import { TiDeleteOutline, TiEdit } from "react-icons/ti";
-import { useNavigate } from "react-router";
+
 import axios from "axios";
-import { log } from "console";
 
 interface Fprops {
   id?: string;
@@ -11,7 +10,6 @@ interface Fprops {
   content: string;
 }
 const Flashcard = (props: Fprops) => {
-  const navigate = useNavigate();
   const [showModal, setShowModal] = useState<boolean>(false);
   const [flashcard, setFlashcard] = useState<Fprops>({
     id: props.id,
@@ -25,7 +23,9 @@ const Flashcard = (props: Fprops) => {
     event.preventDefault();
     try {
       const data = await axios.delete(
-        `https://intelliprep.onrender.com/${username}/flashcards/${props.id}/`,
+        `${import.meta.env.VITE_APP_BACKEND_URL}/${username}/flashcards/${
+          props.id
+        }/`,
         {
           headers: {
             Authorization: `Token ${token}`,
@@ -39,7 +39,7 @@ const Flashcard = (props: Fprops) => {
   }
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    console.log("handleSubmit", flashcard); // Add this line
+    // console.log("handleSubmit", flashcard); // Add this line
     const { title, content } = flashcard;
     const object: Fprops = {
       title,
@@ -47,7 +47,9 @@ const Flashcard = (props: Fprops) => {
     };
     try {
       const data = await axios.put<Fprops>(
-        `https://intelliprep.onrender.com/${username}/flashcards/${props.id}/`,
+        `${import.meta.env.VITE_APP_BACKEND_URL}/${username}/flashcards/${
+          props.id
+        }/`,
         object,
         {
           headers: {

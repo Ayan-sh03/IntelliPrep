@@ -10,16 +10,20 @@ import { useNavigate } from "react-router";
 
 export default function NavbarNeo() {
   const [openNav, setOpenNav] = useState<boolean>(false);
+  const [log, setLog] = useState("Login");
   const navigate = useNavigate();
-  const handleClick = () => {
+  useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      navigate("/account");
-    } else {
-      navigate("/login");
+      setLog("Logout");
     }
-  };
+  }, []);
 
+  const handleClick = () => {
+    localStorage.clear();
+    setLog("Login");
+    navigate("/");
+  };
   useEffect(() => {
     window.addEventListener(
       "resize",
@@ -45,8 +49,8 @@ export default function NavbarNeo() {
         color="blue-gray"
         className="py-3 px-3 rounded-md font-montserrat shadow-md"
       >
-        <a href="#" className="flex items-center" onClick={handleClick}>
-          Account
+        <a href={`/${log}`} className="flex items-center" onClick={handleClick}>
+          {log}
         </a>
       </Typography>
       <Typography

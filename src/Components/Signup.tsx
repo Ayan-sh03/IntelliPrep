@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
@@ -32,7 +32,7 @@ export default function SignUp() {
 
     axios
       .post<ApiResponse>(
-        "https://intelliprep.onrender.com/account/register/",
+        `${import.meta.env.VITE_APP_BACKEND_URL}/account/register/`,
         form
       )
       .then((response) => {
@@ -65,7 +65,7 @@ export default function SignUp() {
 
   //   try {
   //     const response = await fetch(
-  //       "https://intelliprep.onrender.com/account/register/",
+  //       "${process.env.REACT_APP_BACKEND_URL}/account/register/",
   //       requestOptions
   //     );
 

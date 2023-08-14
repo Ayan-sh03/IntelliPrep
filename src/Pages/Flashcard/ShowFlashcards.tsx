@@ -1,7 +1,9 @@
-import React, { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import Flashcard from "../Components/Flashcard";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import Flashcard from "./Flashcard";
 import { TiPlusOutline } from "react-icons/ti";
 import axios from "axios";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import NavbarNeo from "../../Components/Navbar";
 
 interface flashcards {
   id?: string;
@@ -18,6 +20,7 @@ const ShowFlashcards = () => {
       content: "Description",
     },
   ]);
+  const [parent] = useAutoAnimate();
   const [newCard, setNewCard] = useState<flashcards>({
     id: "",
     title: "",
@@ -34,7 +37,7 @@ const ShowFlashcards = () => {
 
     try {
       const response = await axios.get<flashcards[]>(
-        `https://intelliprep.onrender.com/${username}/flashcards`,
+        `${import.meta.env.VITE_APP_BACKEND_URL}/${username}/flashcards`,
         {
           headers: {
             Authorization: `Token ${token}`,
@@ -42,7 +45,7 @@ const ShowFlashcards = () => {
         }
       );
       setFlashcards(response.data);
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       console.error(error);
     }
@@ -71,7 +74,7 @@ const ShowFlashcards = () => {
 
     try {
       const response = await axios.post<flashcards>(
-        `https://intelliprep.onrender.com/${username}/flashcards/`,
+        `${import.meta.env.VITE_APP_BACKEND_URL}/${username}/flashcards/`,
         newCard,
         {
           headers: {
@@ -93,6 +96,7 @@ const ShowFlashcards = () => {
   }, []);
   return (
     <>
+      <NavbarNeo />
       <div className="flex p-20 bg-bgColor1 flex-col gap-5 w-screen h-screen font-montserrat">
         <h1 className="font-bold text-5xl text-white">Flashcards</h1>
         <button
@@ -175,7 +179,7 @@ const ShowFlashcards = () => {
         ) : null}
         {/* Modal window End  */}
 
-        <div className="flex flex-row  gap-10 flex-wrap">
+        <div className="flex flex-row  gap-10 flex-wrap" ref={parent}>
           <Flashcard
             id="1"
             title=" Temporary"

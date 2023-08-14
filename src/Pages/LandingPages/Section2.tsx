@@ -1,8 +1,32 @@
-import React from "react";
-
+import "animate.css";
+import { useEffect, useState } from "react";
 const Section2 = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const section2 = document.getElementById("section2");
+      if (section2) {
+        const sectionTop = section2.getBoundingClientRect().top;
+        const windowHeight = window.innerHeight;
+        if (sectionTop < windowHeight * 0.75) {
+          setIsVisible(true);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
-    <div className="grid bg-bgColor1 grid-cols-2 gap-1 h-screen w-screen p-10 place-items-center font-montserrat text-textColor2">
+    <div
+      id="section2"
+      className={`grid bg-bgColor1 grid-cols-2 gap-1 h-screen w-screen p-10 place-items-center font-montserrat text-textColor2 ${
+        isVisible ? "animate__animated animate__fadeInLeftBig" : ""
+      }`}
+    >
       <div className=" p-4">
         <svg
           className="svg"
@@ -450,7 +474,7 @@ const Section2 = () => {
           />
         </svg>
       </div>
-      <div className=" flex p-4 flex-col">
+      <div className=" flex p-4 flex-col sm:gap-5 sm:mr-4">
         <div className="pb-3 font-extrabold text-5xl">
           <h1>High Quality resourced for exam success</h1>
         </div>
