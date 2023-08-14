@@ -73,7 +73,7 @@ const ShowFlashcards = () => {
     }
 
     try {
-      const response = await axios.post<flashcards>(
+      await axios.post<flashcards>(
         `${import.meta.env.VITE_APP_BACKEND_URL}/${username}/flashcards/`,
         newCard,
         {
@@ -82,7 +82,7 @@ const ShowFlashcards = () => {
           },
         }
       );
-      // console.log(response);
+
       setFlashcards((prevFlashcards) => [...prevFlashcards, newCard]);
 
       setNewCard({ title: "", content: "" });

@@ -22,7 +22,7 @@ const Flashcard = (props: Fprops) => {
   async function handleDelete(event: FormEvent) {
     event.preventDefault();
     try {
-      const data = await axios.delete(
+      await axios.delete(
         `${import.meta.env.VITE_APP_BACKEND_URL}/${username}/flashcards/${
           props.id
         }/`,

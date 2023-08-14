@@ -1,5 +1,3 @@
-import React from "react";
-
 const Account = () => {
   return (
     <div className="font-montserrat m-5">
