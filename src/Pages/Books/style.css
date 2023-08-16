@@ -56,8 +56,9 @@ html {
 }
 .search input {
   outline: 0;
+  border-radius: 5px;
   border: 0;
-  width: 350px;
+  width: 300px;
   height: 35px;
   padding: 0 0.5rem;
   font-size: 15px;
@@ -68,6 +69,7 @@ html {
   border: none;
   height: 35px;
   padding: 0 0.5rem;
+  border: 1px solid black;
 }
 .container1 {
   width: 65%;
@@ -201,4 +203,28 @@ html {
   font-size: 18px;
   font-weight: bold;
   line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .header::before {
+    clip-path: none;
+  }
+  .header {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .search {
+    margin: 0 2rem;
+  }
+
+  .row2 {
+    position: static;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  .search input {
+    width: auto;
+  }
 }

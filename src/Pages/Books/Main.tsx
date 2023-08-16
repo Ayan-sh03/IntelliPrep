@@ -20,7 +20,7 @@ const Main: React.FC = () => {
 
   return (
     <>
-      <div className="header font-montserrat w-full flex justify-center">
+      <div className="header font-montserrat ">
         <div className="row1">
           <h1>
             A room without books is like
@@ -29,7 +29,7 @@ const Main: React.FC = () => {
         </div>
         <div className="row2 font-montserrat sm:flex-col overflow-visible ">
           <h2>Find Your Book</h2>
-          <div className="search font-montserrat ml-5 w-full flex justify-center">
+          <div className="search font-montserrat  ">
             <input
               type="text"
               placeholder="Enter Your Book Name"
